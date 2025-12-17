@@ -87,10 +87,12 @@ if submitted and name:
     # Display Results
     st.success(f"Cheers, {name}! Here is your 2026 outlook:")
     
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Western Sign", western)
-    col2.metric("Chinese Sign", chinese)
-    col3.metric("Beer Score", beer_score)
+    dob_formatted = dob.strftime("%d/%m/%Y")
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Date of Birth", dob_formatted)
+    col2.metric("Western Sign", western)
+    col3.metric("Chinese Sign", chinese)
+    col4.metric("Beer Score", beer_score)
     
     st.subheader("🚀 Success in 2026")
     st.info(success)
