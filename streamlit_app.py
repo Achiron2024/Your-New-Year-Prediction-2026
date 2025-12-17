@@ -66,7 +66,7 @@ st.write("Find out what 2026 holds for your love life and success!")
 
 with st.form("horoscope_form"):
     name = st.text_input("Your Name")
-    dob = st.date_input("Date of Birth", min_value=datetime(1940, 1, 1), max_value=datetime(2025, 1, 1))
+    dob = st.date_input("Date of Birth", min_value=datetime(1940, 1, 1), max_value=datetime(2025, 1, 1), format="DD/MM/YYYY")
     beer_score = st.slider("How much do you like beer? (1-5)", 1, 5, 3)
     submitted = st.form_submit_button("Get my Prediction")
 
