@@ -11,7 +11,7 @@ LOG_FILE = "predictions_log.csv"
 def load_log():
     if os.path.exists(LOG_FILE):
         return pd.read_csv(LOG_FILE)
-    return pd.DataFrame(columns=["timestamp", "user_name", "dob", "beer_score", "western", "chinese"])
+    return pd.DataFrame(columns=["timestamp", "user_name", "dob", "beer_score", "western", "chinese", "success", "love"])
 
 def save_prediction(data):
     df = load_log()
@@ -127,7 +127,7 @@ if submitted and name:
     log_data = {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M"),
         "user_name": name, "dob": dob_str, "beer_score": beer_score,
-        "western": western, "chinese": chinese
+        "western": western, "chinese": chinese, "success": success, "love": love
     }
     total_users = save_prediction(log_data)
 
@@ -159,7 +159,14 @@ if admin_password == "admin123":  # Change this to your desired password
     st.subheader("Recent Predictions")
     st.dataframe(admin_data.tail(10))
     st.write(f"📊 Total: **{len(admin_data)}** people have checked their beer destiny!")
-    
+
+    # Clear Data Button
+    if st.button("🗑️ Clear All Data"):
+        # Remove the CSV file if it exists
+        if os.path.exists(LOG_FILE):
+            os.remove(LOG_FILE)
+        st.success("All prediction data has been cleared!")
+
     st.subheader("Export Summary")
     if st.button("📥 Download Excel Report"):
         excel_file = export_to_excel()
