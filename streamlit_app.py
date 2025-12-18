@@ -85,11 +85,17 @@ def build_predictions(dob_str, beer_score):
 # --- STREAMLIT UI ---
 st.set_page_config(page_title="Beer Horoscope 2026", page_icon="🍺")
 
-# Apply Arial font to entire app
+# Apply Arial font to entire app and style metrics
 st.markdown("""
     <style>
-        * {
-            font-family: Arial, sans-serif;
+        body, html, div, p, h1, h2, h3, h4, h5, h6, span, label, input, textarea, button {
+            font-family: Arial, sans-serif !important;
+        }
+        [data-testid="metric-container"] {
+            font-family: Arial, sans-serif !important;
+        }
+        [data-testid="metric-container"] [data-testid="stMetricValue"] {
+            font-size: 1.2rem !important;
         }
     </style>
     """, unsafe_allow_html=True)
