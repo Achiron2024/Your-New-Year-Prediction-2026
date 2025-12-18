@@ -3,6 +3,7 @@ import pandas as pd
 import hashlib
 import os
 from datetime import datetime
+from io import BytesIO
 
 # --- CONFIGURATION & LOGGING ---
 LOG_FILE = "predictions_log.csv"
@@ -18,6 +19,29 @@ def save_prediction(data):
     df = pd.concat([df, new_row], ignore_index=True)
     df.to_csv(LOG_FILE, index=False)
     return len(df)
+
+def export_to_excel():
+    df = load_log()
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, sheet_name='Predictions', index=False)
+        
+        # Add summary statistics to a second sheet
+        summary_data = {
+            'Metric': ['Total Users', 'Date Range', 'Most Common Beer Score', 'Most Common Western Sign', 'Most Common Chinese Sign'],
+            'Value': [
+                len(df),
+                f"{df['timestamp'].min() if len(df) > 0 else 'N/A'} to {df['timestamp'].max() if len(df) > 0 else 'N/A'}",
+                df['beer_score'].mode()[0] if len(df) > 0 else 'N/A',
+                df['western'].mode()[0] if len(df) > 0 else 'N/A',
+                df['chinese'].mode()[0] if len(df) > 0 else 'N/A'
+            ]
+        }
+        summary_df = pd.DataFrame(summary_data)
+        summary_df.to_excel(writer, sheet_name='Summary', index=False)
+    
+    output.seek(0)
+    return output
 
 # --- LOGIC FUNCTIONS (Stable from your original code) ---
 def stable_index(key: str, n: int) -> int:
@@ -108,4 +132,16 @@ elif submitted and not name:
 
 # --- ADMIN VIEW (Optional) ---
 if st.checkbox("Show recent activity (Admin)"):
-    st.dataframe(load_log().tail(10))
+    admin_data = load_log()
+    st.subheader("Recent Predictions")
+    st.dataframe(admin_data.tail(10))
+    
+    st.subheader("Export Summary")
+    if st.button("📥 Download Excel Report"):
+        excel_file = export_to_excel()
+        st.download_button(
+            label="Download Predictions Report",
+            data=excel_file,
+            file_name=f"predictions_summary_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
