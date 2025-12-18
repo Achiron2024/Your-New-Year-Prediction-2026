@@ -128,9 +128,6 @@ if submitted and name:
     
     st.subheader("❤️ Love in 2026")
     st.warning(love)
-    
-    st.divider()
-    st.write(f"📊 You are the **{total_users}th** person to check their beer destiny!")
 
 elif submitted and not name:
     st.error("Please enter your name!")
@@ -143,6 +140,7 @@ if admin_password == "admin123":  # Change this to your desired password
     admin_data = load_log()
     st.subheader("Recent Predictions")
     st.dataframe(admin_data.tail(10))
+    st.write(f"📊 Total: **{len(admin_data)}** people have checked their beer destiny!")
     
     st.subheader("Export Summary")
     if st.button("📥 Download Excel Report"):
