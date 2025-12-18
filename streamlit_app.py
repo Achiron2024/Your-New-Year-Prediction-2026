@@ -130,8 +130,11 @@ if submitted and name:
 elif submitted and not name:
     st.error("Please enter your name!")
 
-# --- ADMIN VIEW (Optional) ---
-if st.checkbox("Show recent activity (Admin)"):
+# --- ADMIN VIEW (Password Protected) ---
+st.divider()
+admin_password = st.text_input("Admin Password:", type="password", key="admin_pass")
+
+if admin_password == "admin123":  # Change this to your desired password
     admin_data = load_log()
     st.subheader("Recent Predictions")
     st.dataframe(admin_data.tail(10))
@@ -145,3 +148,5 @@ if st.checkbox("Show recent activity (Admin)"):
             file_name=f"predictions_summary_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
+elif admin_password and admin_password != "admin123":
+    st.error("❌ Incorrect password!")
