@@ -85,6 +85,15 @@ def build_predictions(dob_str, beer_score):
 # --- STREAMLIT UI ---
 st.set_page_config(page_title="Beer Horoscope 2026", page_icon="🍺")
 
+# Apply Arial font to entire app
+st.markdown("""
+    <style>
+        * {
+            font-family: Arial, sans-serif;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
 st.title("🍺 Beer Horoscope 2026")
 st.write("Find out what 2026 holds for your love life and success!")
 
@@ -118,15 +127,15 @@ if submitted and name:
     
     dob_formatted = dob.strftime("%d/%m/%Y")
     col1, col2, col3, col4 = st.columns(4)
-    col1.metric("Date of Birth", dob_formatted)
+    col1.metric("DOB", dob_formatted)
     col2.metric("Western Sign", western)
     col3.metric("Chinese Sign", chinese)
     col4.metric("Beer Score", beer_score)
     
-    st.subheader("🚀 Success in 2026")
+    st.markdown("### 🚀 Success in 2026")
     st.info(success)
     
-    st.subheader("❤️ Love in 2026")
+    st.markdown("### ❤️ Love in 2026")
     st.warning(love)
 
 elif submitted and not name:
